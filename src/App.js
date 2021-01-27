@@ -1,25 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import Footer from './components/footer';
+import NewTaskForm from './components/new-task-form';
+import TaskList from './components/task-list';
 
-function App() {
+
+
+const App = () => {
+  
+  const tasks = [
+    {text: 'Task #1', id: 1},
+    {text: 'Task #2', id: 2},
+    {text: 'Task #3', id: 3},
+  ];
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <section className="todoapp">
+      <header className="header">
+        <NewTaskForm />
       </header>
-    </div>
-  );
+      <section className="main">
+        <TaskList tasks={tasks} />
+        <Footer />
+      </section>
+    </section>
+  )
 }
 
 export default App;
