@@ -4,21 +4,31 @@ import './task.css';
 
 const createDate = new Date();
 
-const Task = ({text}) => {
+const Task = ({text, active, id, onChangeStatus, onDeleteTask}) => {
 
   return (
-    <li>
+    <li className={active ? 'completed' : ''} >
       <div className="view">
         <input 
           className="toggle" 
-          type="checkbox" 
+          type="checkbox"
+          checked={active ? true : false}
+          onClick={() => onChangeStatus(id)}
         />
         <label>
-          <span className="description">{text}</span>
+          <span 
+            className="description" 
+            onClick={() => onChangeStatus(id)}
+          >
+            {text}
+          </span>
           <span className="created">{formatDistanceToNow(createDate)}</span>
         </label>
         <button className="icon icon-edit"></button>
-        <button className="icon icon-destroy"></button>
+        <button 
+          className="icon icon-destroy" 
+          onClick={() => onDeleteTask(id)}
+        ></button>
       </div>
     </li>
   )
