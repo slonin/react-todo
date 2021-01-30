@@ -2,18 +2,20 @@ import React from 'react';
 import {formatDistanceToNow} from 'date-fns';
 import './task.css';
 
-const createDate = new Date();
+const Task = ({text, active, id, created, onChangeStatus, onDeleteTask, filter}) => {
 
-const Task = ({text, active, id, onChangeStatus, onDeleteTask}) => {
-
+  let className = active ? '' : 'completed';
+  className += `${filter === 'active' && !active ? ' hidden' : ''}`;
+  className += `${filter === 'completed' && active ? 'hidden' : ''}`;
+  
   return (
-    <li className={active ? 'completed' : ''} >
+    <li className={className}>
       <div className="view">
         <input 
           className="toggle" 
           type="checkbox"
-          checked={active ? true : false}
-          onClick={() => onChangeStatus(id)}
+          checked={active ? false : true} 
+          onChange={() => onChangeStatus(id)}
         />
         <label>
           <span 
@@ -22,7 +24,7 @@ const Task = ({text, active, id, onChangeStatus, onDeleteTask}) => {
           >
             {text}
           </span>
-          <span className="created">{formatDistanceToNow(createDate)}</span>
+          <span className="created">{formatDistanceToNow(created)}</span>
         </label>
         <button className="icon icon-edit"></button>
         <button 

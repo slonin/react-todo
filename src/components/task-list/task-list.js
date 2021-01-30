@@ -1,9 +1,9 @@
 import React from 'react';
 import Task from '../task';
 
-const TaskList = ({tasks, onChangeStatus, onDeleteTask}) => {
+const TaskList = ({tasks, onChangeStatus, onDeleteTask, filter}) => {
 
-  const taskList = tasks.map(({text, id, active}) => {
+  const taskList = tasks.map(({text, id, active, created}) => {
     return (
       <Task 
         text={text}
@@ -12,6 +12,8 @@ const TaskList = ({tasks, onChangeStatus, onDeleteTask}) => {
         active={active}
         onChangeStatus={onChangeStatus} 
         onDeleteTask={onDeleteTask}
+        filter={filter}
+        created={created}
       />
     )
   })

@@ -1,12 +1,35 @@
-import React from 'react'
+import React from 'react';
 
-const TaskFilter = () => {
+const TaskFilter = ({filter, onToggleFilter}) => {
+
   return (
     <ul className="filters">
       <li>
-        <button className="selected">All</button>
-        <button>Active</button>
-        <button>Completed</button>
+        <button 
+          name="all" 
+          className={filter === 'all' ? 'selected' : ''} 
+          onClick={(e) => onToggleFilter(e.target.name)}
+        >
+          All
+        </button>
+      </li>
+      <li>
+        <button 
+          name="active" 
+          className={filter === 'active' ? 'selected' : '' } 
+          onClick={(e) => onToggleFilter(e.target.name)}
+        >
+          Active
+        </button>
+      </li>
+      <li>
+        <button 
+          name="completed" 
+          className={filter === 'completed' ? 'selected' : ''} 
+          onClick={(e) => onToggleFilter(e.target.name)}
+        >
+          Completed
+        </button>
       </li>
     </ul>
   )

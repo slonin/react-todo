@@ -4,34 +4,50 @@ import NewTaskForm from './components/new-task-form';
 import TaskList from './components/task-list';
 
 
-
 export default class App extends Component {
   
   state = {
     tasks: [
-      {text: 'Task #1', id: 1, active: false},
-      {text: 'Task #2', id: 2, active: false},
-      {text: 'Task #3', id: 3, active: false},
-    ]
+      {text: 'Task #1', id: 1, active: true, created: new Date()},
+      {text: 'Task #2', id: 2, active: true, created: new Date()},
+      {text: 'Task #3', id: 3, active: true, created: new Date()},
+    ],
+    filter: 'all',
   }
 
-  handleStatusChange = (taskId) => {
+  handleToggleStatus= (taskId) => {
     this.setState(({tasks}) => {
-      const newState = tasks.map(({text, id, active}) => {
-        if (taskId === id) {
-          active = !active
+      const newState = tasks.map(task => {
+        if (taskId === task.id) {
+          task.active = !task.active
         }
 
-        return ({text, id, active})
+        return task;
       })
       return {tasks: newState};
     })
   }
 
+  handleCreateTask = (text) => {
+    this.setState(({tasks}) => {
+      return {
+        tasks: [...tasks, { text: text, id: Math.random() * 10000, active: true, created: new Date()}]
+      }
+    })
+  }
+
   handleDeleteTask = (taskId) => {
     this.setState(({tasks}) => {
+      const newState = tasks.filter(task => taskId !== task.id);
+      
+      return {tasks: newState}
+    })
+  }
+
+  handleDeleteCompletedTask = () => {
+    this.setState(({tasks}) => {
       const newState = tasks.filter(({text, id, active}) => {
-        if (taskId !== id) {
+        if (active) {
           return ({text, id, active})
         }
 
@@ -42,19 +58,31 @@ export default class App extends Component {
     })
   }
 
+  handleToggleFilter = (name) => {
+    this.setState({
+      filter: name
+    })
+  }
+
   render() {
     return (
       <section className="todoapp">
         <header className="header">
-          <NewTaskForm />
+          <NewTaskForm onCreateTask={this.handleCreateTask} />
         </header>
         <section className="main">
           <TaskList 
             tasks={this.state.tasks}
-            onChangeStatus={this.handleStatusChange}
+            onChangeStatus={this.handleToggleStatus}
             onDeleteTask={this.handleDeleteTask}
+            filter={this.state.filter}
           />
-          <Footer />
+          <Footer  
+            tasks={this.state.tasks}
+            onDeleteCompletedTasks={this.handleDeleteCompletedTask}
+            onToggleFilter={this.handleToggleFilter}
+            filter={this.state.filter}
+          />
         </section>
       </section>
     )
