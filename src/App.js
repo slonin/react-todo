@@ -46,13 +46,7 @@ export default class App extends Component {
 
   handleDeleteCompletedTask = () => {
     this.setState(({tasks}) => {
-      const newState = tasks.filter(({text, id, active}) => {
-        if (active) {
-          return ({text, id, active})
-        }
-
-        return null;
-      })
+      const newState = tasks.filter((task) => task.active ? task : null)
 
       return {tasks: newState}
     })
