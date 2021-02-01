@@ -1,9 +1,11 @@
 import React from 'react';
 import Task from '../task';
+import PropTypes from 'prop-types';
+import './task-list.css';
 
-const TaskList = ({tasks, onChangeStatus, onDeleteTask, filter}) => {
+const TaskList = ({tasks, onChangeStatus, onDeleteTask, filter, onEditTask, onEditTextTask}) => {
 
-  const taskList = tasks.map(({text, id, active, created}) => {
+  const taskList = tasks.map(({text, id, active, created, editing}) => {
     return (
       <Task 
         text={text}
@@ -14,6 +16,9 @@ const TaskList = ({tasks, onChangeStatus, onDeleteTask, filter}) => {
         onDeleteTask={onDeleteTask}
         filter={filter}
         created={created}
+        editing={editing}
+        onEditTask={onEditTask}
+        onEditTextTask={onEditTextTask}
       />
     )
   })
@@ -23,6 +28,22 @@ const TaskList = ({tasks, onChangeStatus, onDeleteTask, filter}) => {
       {taskList}
     </ul>
   )
+}
+
+TaskList.defaultProps = {
+  onChangeStatus: () => {},
+  onDeleteTask: () => {},
+  onEditTask: () => {},
+  onEditTexTask: () => {},
+  filter: 'all',
+}
+
+TaskList.propTypes = {
+  tasks: PropTypes.arrayOf(PropTypes.object),
+  onChangeStatus: PropTypes.func,
+  onDeleteTask: PropTypes.func,
+  onEditTextTask: PropTypes.func,
+  filter: PropTypes.string,
 }
 
 export default TaskList;

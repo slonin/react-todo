@@ -8,9 +8,9 @@ export default class App extends Component {
   
   state = {
     tasks: [
-      {text: 'Task #1', id: 1, active: true, created: new Date()},
-      {text: 'Task #2', id: 2, active: true, created: new Date()},
-      {text: 'Task #3', id: 3, active: true, created: new Date()},
+      {text: 'Task #1', id: 1, active: true, editing: false, created: new Date()},
+      {text: 'Task #2', id: 2, active: true, editing: false, created: new Date()},
+      {text: 'Task #3', id: 3, active: true, editing: false, created: new Date()},
     ],
     filter: 'all',
   }
@@ -52,6 +52,35 @@ export default class App extends Component {
     })
   }
 
+  handleEditTask = (taskId) => {
+    this.setState(({tasks}) => {
+      const newState = tasks.map(task => {
+        if (taskId === task.id) {
+          task.editing = !task.editing;
+        }
+
+        return task;
+      })
+
+      return {tasks: newState};
+    })
+  }
+
+  handleEditTextTask = (text, taskId) => {
+    this.setState(({tasks}) => {
+      const newState = tasks.map(task => {
+        if (taskId === task.id) {
+          task.text = text;
+          task.editing = !task.editing;
+        }
+
+        return task;
+      })
+
+      return {tasks: newState};
+    })
+  }
+
   handleToggleFilter = (name) => {
     this.setState({
       filter: name
@@ -62,6 +91,7 @@ export default class App extends Component {
     return (
       <section className="todoapp">
         <header className="header">
+          <h1>todos</h1>
           <NewTaskForm onCreateTask={this.handleCreateTask} />
         </header>
         <section className="main">
@@ -69,7 +99,9 @@ export default class App extends Component {
             tasks={this.state.tasks}
             onChangeStatus={this.handleToggleStatus}
             onDeleteTask={this.handleDeleteTask}
+            onEditTask={this.handleEditTask}
             filter={this.state.filter}
+            onEditTextTask={this.handleEditTextTask}
           />
           <Footer  
             tasks={this.state.tasks}
@@ -80,6 +112,5 @@ export default class App extends Component {
         </section>
       </section>
     )
-  }
-    
+  }   
 }

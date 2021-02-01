@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import './task-filter.css';
 
 const TaskFilter = ({filter, onToggleFilter}) => {
 
@@ -33,6 +35,16 @@ const TaskFilter = ({filter, onToggleFilter}) => {
       </li>
     </ul>
   )
+}
+
+TaskFilter.defaultProps = {
+  filter: 'all',
+  onToggleFilter: () => {},
+}
+
+TaskFilter.propTypes = {
+  filter: PropTypes.string,
+  onToggleFilter: PropTypes.func,
 }
 
 export default TaskFilter;

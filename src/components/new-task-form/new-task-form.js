@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import './new-task-form.css';
 
 export default class NewTaskForm extends Component {
 
@@ -19,8 +21,6 @@ export default class NewTaskForm extends Component {
         inputValue: ''
       })
     }
-
-
   }
 
   render() {
@@ -37,4 +37,10 @@ export default class NewTaskForm extends Component {
   }
 }
 
+NewTaskForm.defaultProps = {
+  onCreateTask: () => {},
+}
 
+NewTaskForm.propTypes = {
+  onCreateTask: PropTypes.func,
+}
