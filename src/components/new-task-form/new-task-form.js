@@ -3,44 +3,44 @@ import PropTypes from 'prop-types';
 import './new-task-form.css';
 
 export default class NewTaskForm extends Component {
-
   state = {
-    inputValue: ''
-  }
+    inputValue: '',
+  };
 
-  handleInputChange = (e) => {
+  handleInputChange = (event) => {
     this.setState({
-      inputValue: e.target.value
-    })
-  }
+      inputValue: event.target.value,
+    });
+  };
 
-  handleKeyDown = (e) => {
-    if (e.key === 'Enter' && e.target.value.trim() !== '') {
-      this.props.onCreateTask(e.target.value);
+  handleKeyDown = (event) => {
+    const { onCreateTask } = this.props;
+    if (event.key === 'Enter' && event.target.value.trim() !== '') {
+      onCreateTask(event.target.value);
       this.setState({
-        inputValue: ''
-      })
+        inputValue: '',
+      });
     }
-  }
+  };
 
   render() {
+    const { inputValue } = this.state;
     return (
-      <input 
+      <input
         className="new-todo"
         placeholder="What needs to be done?"
-        autoFocus
         onKeyDown={this.handleKeyDown}
         onChange={this.handleInputChange}
-        value={this.state.inputValue}
+        value={inputValue}
       />
-    )
+    );
   }
 }
 
 NewTaskForm.defaultProps = {
   onCreateTask: () => {},
-}
+};
 
 NewTaskForm.propTypes = {
   onCreateTask: PropTypes.func,
-}
+};
