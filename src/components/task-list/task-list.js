@@ -3,18 +3,14 @@ import PropTypes from 'prop-types';
 import Task from '../task';
 import './task-list.css';
 
-const TaskList = ({ tasks, onChangeStatus, onDeleteTask, filter, onToggleEditInput, onEditTask }) => {
-  const taskList = tasks.map(({ text, id, active, created, editing }) => (
+const TaskList = ({ tasks, onChangeStatus, onDeleteTask, currentFilter, onToggleEditInput, onEditTask }) => {
+  const taskList = tasks.map((task) => (
     <Task
-      text={text}
-      key={id}
-      id={id}
-      active={active}
+      {...task}
+      key={task.id}
       onChangeStatus={onChangeStatus}
       onDeleteTask={onDeleteTask}
-      filter={filter}
-      created={created}
-      editing={editing}
+      currentFilter={currentFilter}
       onToggleEditInput={onToggleEditInput}
       onEditTask={onEditTask}
     />
@@ -28,17 +24,25 @@ TaskList.defaultProps = {
   onDeleteTask: () => {},
   onToggleEditInput: () => {},
   onEditTask: () => {},
-  filter: 'all',
+  currentFilter: 'all',
   tasks: [],
+  task: {},
 };
 
 TaskList.propTypes = {
+  task: PropTypes.shape({
+    text: PropTypes.string,
+    id: PropTypes.number,
+    isActive: PropTypes.bool,
+    isEditing: PropTypes.bool,
+    created: PropTypes.number,
+  }),
   tasks: PropTypes.arrayOf(PropTypes.object),
   onChangeStatus: PropTypes.func,
   onDeleteTask: PropTypes.func,
   onEditTask: PropTypes.func,
   onToggleEditInput: PropTypes.func,
-  filter: PropTypes.string,
+  currentFilter: PropTypes.string,
 };
 
 export default TaskList;

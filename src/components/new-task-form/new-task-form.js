@@ -3,25 +3,29 @@ import PropTypes from 'prop-types';
 import './new-task-form.css';
 
 export default class NewTaskForm extends Component {
-  state = {
-    inputValue: '',
-  };
+  constructor() {
+    super();
 
-  handleInputChange = (event) => {
-    this.setState({
-      inputValue: event.target.value,
-    });
-  };
+    this.state = {
+      inputValue: '',
+    };
 
-  handleKeyDown = (event) => {
-    const { onCreateTask } = this.props;
-    if (event.key === 'Enter' && event.target.value.trim() !== '') {
-      onCreateTask(event.target.value);
+    this.handleInputChange = (event) => {
       this.setState({
-        inputValue: '',
+        inputValue: event.target.value,
       });
-    }
-  };
+    };
+
+    this.handleKeyDown = (event) => {
+      const { onCreateTask } = this.props;
+      if (event.key === 'Enter' && event.target.value.trim() !== '') {
+        onCreateTask(event.target.value);
+        this.setState({
+          inputValue: '',
+        });
+      }
+    };
+  }
 
   render() {
     const { inputValue } = this.state;

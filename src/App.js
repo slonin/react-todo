@@ -4,87 +4,91 @@ import NewTaskForm from './components/new-task-form';
 import TaskList from './components/task-list';
 
 export default class App extends Component {
-  state = {
-    tasks: [
-      { text: 'Task #1', id: 1, active: true, editing: false, created: Date.now() },
-      { text: 'Task #2', id: 2, active: true, editing: false, created: Date.now() },
-      { text: 'Task #3', id: 3, active: true, editing: false, created: Date.now() },
-    ],
-    filter: 'all',
-  };
+  constructor() {
+    super();
 
-  handleToggleStatus = (taskId) => {
-    this.setState(({ tasks }) => {
-      const newState = tasks.map((task) => {
-        if (taskId === task.id) {
-          task.active = !task.active;
-        }
+    this.state = {
+      tasks: [
+        { text: 'Task #1', id: 1, isActive: true, isEditing: false, created: Date.now() },
+        { text: 'Task #2', id: 2, isActive: true, isEditing: false, created: Date.now() },
+        { text: 'Task #3', id: 3, isActive: true, isEditing: false, created: Date.now() },
+      ],
+      currentFilter: 'all',
+    };
 
-        return task;
+    this.handleToggleStatus = (taskId) => {
+      this.setState(({ tasks }) => {
+        const newState = tasks.map((task) => {
+          if (taskId === task.id) {
+            task.isActive = !task.isActive;
+          }
+
+          return task;
+        });
+        return { tasks: newState };
       });
-      return { tasks: newState };
-    });
-  };
+    };
 
-  handleCreateTask = (text) => {
-    this.setState(({ tasks }) => ({
-      tasks: [...tasks, { text, id: Math.random() * 10000, active: true, created: Date.now() }],
-    }));
-  };
+    this.handleCreateTask = (text) => {
+      this.setState(({ tasks }) => ({
+        tasks: [...tasks, { text, id: Math.random() * 10000, isActive: true, isEditing: false, created: Date.now() }],
+      }));
+    };
 
-  handleDeleteTask = (taskId) => {
-    this.setState(({ tasks }) => {
-      const newState = tasks.filter((task) => taskId !== task.id);
+    this.handleDeleteTask = (taskId) => {
+      this.setState(({ tasks }) => {
+        const newState = tasks.filter((task) => taskId !== task.id);
 
-      return { tasks: newState };
-    });
-  };
-
-  handleDeleteCompletedTask = () => {
-    this.setState(({ tasks }) => {
-      const newState = tasks.filter((task) => (task.active ? task : null));
-
-      return { tasks: newState };
-    });
-  };
-
-  handleToggleEditInput = (taskId) => {
-    this.setState(({ tasks }) => {
-      const newState = tasks.map((task) => {
-        if (taskId === task.id) {
-          task.editing = !task.editing;
-        }
-
-        return task;
+        return { tasks: newState };
       });
+    };
 
-      return { tasks: newState };
-    });
-  };
+    this.handleDeleteCompletedTasks = () => {
+      this.setState(({ tasks }) => {
+        const newState = tasks.filter((task) => (task.isActive ? task : null));
 
-  handleEditTask = (text, taskId) => {
-    this.setState(({ tasks }) => {
-      const newState = tasks.map((task) => {
-        if (taskId === task.id) {
-          task.text = text;
-          task.editing = !task.editing;
-        }
-
-        return task;
+        return { tasks: newState };
       });
+    };
 
-      return { tasks: newState };
-    });
-  };
+    this.handleToggleEditInput = (taskId) => {
+      this.setState(({ tasks }) => {
+        const newState = tasks.map((task) => {
+          if (taskId === task.id) {
+            task.isEditing = !task.isEditing;
+          }
 
-  handleToggleFilter = (name) => {
-    this.setState({
-      filter: name,
-    });
-  };
+          return task;
+        });
+
+        return { tasks: newState };
+      });
+    };
+
+    this.handleEditTask = (text, taskId) => {
+      this.setState(({ tasks }) => {
+        const newState = tasks.map((task) => {
+          if (taskId === task.id) {
+            task.text = text;
+            task.isEditing = !task.isEditing;
+          }
+
+          return task;
+        });
+
+        return { tasks: newState };
+      });
+    };
+
+    this.handleToggleFilter = (name) => {
+      this.setState({
+        currentFilter: name,
+      });
+    };
+  }
 
   render() {
-    const { tasks, filter } = this.state;
+    const { tasks, currentFilter } = this.state;
 
     return (
       <section className="todoapp">
@@ -98,14 +102,14 @@ export default class App extends Component {
             onChangeStatus={this.handleToggleStatus}
             onDeleteTask={this.handleDeleteTask}
             onEditTask={this.handleEditTask}
-            filter={filter}
+            currentFilter={currentFilter}
             onToggleEditInput={this.handleToggleEditInput}
           />
           <Footer
             tasks={tasks}
-            onDeleteCompletedTasks={this.handleDeleteCompletedTask}
+            onDeleteCompletedTasks={this.handleDeleteCompletedTasks}
             onToggleFilter={this.handleToggleFilter}
-            filter={filter}
+            currentFilter={currentFilter}
           />
         </section>
       </section>

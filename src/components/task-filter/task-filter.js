@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './task-filter.css';
 
-const TaskFilter = ({ filter, onToggleFilter }) => (
+const TaskFilter = ({ currentFilter, onToggleFilter }) => (
   <ul className="filters">
     <li>
       <button
         type="button"
         name="all"
-        className={filter === 'all' ? 'selected' : ''}
+        className={currentFilter === 'all' ? 'selected' : ''}
         onClick={(event) => onToggleFilter(event.target.name)}
       >
         All
@@ -18,7 +18,7 @@ const TaskFilter = ({ filter, onToggleFilter }) => (
       <button
         type="button"
         name="active"
-        className={filter === 'active' ? 'selected' : ''}
+        className={currentFilter === 'active' ? 'selected' : ''}
         onClick={(event) => onToggleFilter(event.target.name)}
       >
         Active
@@ -28,7 +28,7 @@ const TaskFilter = ({ filter, onToggleFilter }) => (
       <button
         type="button"
         name="completed"
-        className={filter === 'completed' ? 'selected' : ''}
+        className={currentFilter === 'completed' ? 'selected' : ''}
         onClick={(event) => onToggleFilter(event.target.name)}
       >
         Completed
@@ -38,12 +38,12 @@ const TaskFilter = ({ filter, onToggleFilter }) => (
 );
 
 TaskFilter.defaultProps = {
-  filter: 'all',
+  currentFilter: 'all',
   onToggleFilter: () => {},
 };
 
 TaskFilter.propTypes = {
-  filter: PropTypes.string,
+  currentFilter: PropTypes.string,
   onToggleFilter: PropTypes.func,
 };
 
