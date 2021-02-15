@@ -9,9 +9,9 @@ export default class App extends Component {
 
     this.state = {
       tasks: [
-        { text: 'Task #1', id: 1, isActive: true, isEditing: false, created: Date.now() },
-        { text: 'Task #2', id: 2, isActive: true, isEditing: false, created: Date.now() },
-        { text: 'Task #3', id: 3, isActive: true, isEditing: false, created: Date.now() },
+        { text: 'Task #1', id: 1, isActive: true, isEditing: false, created: Date.now(), timerValue: [0, 0] },
+        { text: 'Task #2', id: 2, isActive: true, isEditing: false, created: Date.now(), timerValue: [0, 0] },
+        { text: 'Task #3', id: 3, isActive: true, isEditing: false, created: Date.now(), timerValue: [0, 0] },
       ],
       currentFilter: 'all',
     };
@@ -29,9 +29,13 @@ export default class App extends Component {
       });
     };
 
-    this.handleCreateTask = (text) => {
+    this.handleCreateTask = (text, minutes, seconds) => {
+      const timerValue = [minutes, seconds];
       this.setState(({ tasks }) => ({
-        tasks: [...tasks, { text, id: Math.random() * 10000, isActive: true, isEditing: false, created: Date.now() }],
+        tasks: [
+          ...tasks,
+          { text, id: Math.random() * 10000, isActive: true, isEditing: false, created: Date.now(), timerValue },
+        ],
       }));
     };
 

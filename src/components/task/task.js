@@ -10,6 +10,9 @@ export default class Task extends Component {
     this.state = {
       // eslint-disable-next-line react/destructuring-assignment
       newText: this.props.text,
+      totalTime: 0,
+      // eslint-disable-next-line react/no-unused-state
+      timer: null,
     };
 
     this.handleInputChange = (event) => {
@@ -19,19 +22,54 @@ export default class Task extends Component {
     };
 
     this.handleKeyDown = (event) => {
-      const { onEditTask, id, text } = this.props;
+      const { newText } = this.state;
+      const { onEditTask, id } = this.props;
       if (event.key === 'Enter' && event.target.value.trim() !== '') {
-        onEditTask(event.target.value, id);
+        onEditTask(newText, id);
       }
 
       if (event.key === 'Escape') {
-        onEditTask(text, id);
+        onEditTask(newText, id);
       }
+    };
+
+    this.tick = () => {
+      // eslint-disable-next-line react/destructuring-assignment
+      if (this.state.totalTime > 0) {
+        this.setState(({ totalTime }) => ({
+          totalTime: totalTime - 1,
+        }));
+      }
+    };
+
+    this.runTick = () => {
+      const timer = setInterval(this.tick, 1000);
+      this.setState({
+        // eslint-disable-next-line react/no-unused-state
+        timer,
+      });
+    };
+
+    this.stopTick = () => {
+      const { timer } = this.state;
+      clearInterval(timer);
     };
   }
 
+  componentDidMount() {
+    const { timerValue } = this.props;
+    this.setState({
+      totalTime: timerValue[0] * 60 + timerValue[1],
+    });
+  }
+
+  componentWillUnmount() {
+    this.stopTick();
+  }
+
   render() {
-    const { newText } = this.state;
+    // eslint-disable-next-line prefer-const
+    let { newText, totalTime } = this.state;
     const {
       text,
       isActive,
@@ -44,6 +82,10 @@ export default class Task extends Component {
       onToggleEditInput,
     } = this.props;
 
+    const min = totalTime / 60 < 10 ? `0${Math.floor(totalTime / 60)}` : Math.floor(totalTime / 60);
+    const sec = totalTime % 60 < 10 ? (totalTime = `0${totalTime % 60}`) : totalTime % 60;
+    const timer = `${min}:${sec}`;
+
     let className = isActive ? '' : 'completed';
     className += `${isEditing ? ' editing' : ''}`;
     className += `${currentFilter === 'active' && !isActive ? ' hidden' : ''}`;
@@ -54,7 +96,12 @@ export default class Task extends Component {
         <div className="view">
           <input className="toggle" type="checkbox" checked={!isActive} onChange={() => onChangeStatus(id)} />
           <label>
-            <span className="description">{text}</span>
+            <span className="title">{text}</span>
+            <span className="description">
+              <button type="button" label="Run timer" className="icon icon-play" onClick={this.runTick} />
+              <button type="button" label="Pause timer" className="icon icon-pause" onClick={this.stopTick} />
+              <span className="timer-value">{timer}</span>
+            </span>
             <span className="created">created {formatDistanceToNow(created, { includeSeconds: true })} ago</span>
           </label>
           <button label="Edit task" type="button" className="icon icon-edit" onClick={() => onToggleEditInput(id)} />
@@ -79,6 +126,7 @@ Task.defaultProps = {
   created: new Date(),
   currentFilter: 'all',
   isEditing: false,
+  timerValue: [],
   onChangeStatus: () => {},
   onDeleteTask: () => {},
   onEditTask: () => {},
@@ -96,4 +144,5 @@ Task.propTypes = {
   onEditTask: PropTypes.func,
   currentFilter: PropTypes.string,
   onToggleEditInput: PropTypes.func,
+  timerValue: PropTypes.arrayOf(PropTypes.number),
 };

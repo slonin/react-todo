@@ -8,6 +8,8 @@ export default class NewTaskForm extends Component {
 
     this.state = {
       inputValue: '',
+      minutesValue: '',
+      secondsValue: '',
     };
 
     this.handleInputChange = (event) => {
@@ -16,27 +18,58 @@ export default class NewTaskForm extends Component {
       });
     };
 
-    this.handleKeyDown = (event) => {
+    this.handleInputMinutes = (event) => {
+      this.setState({
+        minutesValue: event.target.value,
+      });
+    };
+
+    this.handleInputSeconds = (event) => {
+      this.setState({
+        secondsValue: event.target.value,
+      });
+    };
+
+    this.handleSubmitForm = (event) => {
+      event.preventDefault();
+      const { inputValue, minutesValue, secondsValue } = this.state;
       const { onCreateTask } = this.props;
-      if (event.key === 'Enter' && event.target.value.trim() !== '') {
-        onCreateTask(event.target.value);
-        this.setState({
-          inputValue: '',
-        });
-      }
+      onCreateTask(inputValue, +minutesValue, +secondsValue);
+      this.setState({
+        inputValue: '',
+        minutesValue: '',
+        secondsValue: '',
+      });
     };
   }
 
   render() {
-    const { inputValue } = this.state;
+    const { inputValue, minutesValue, secondsValue } = this.state;
     return (
-      <input
-        className="new-todo"
-        placeholder="What needs to be done?"
-        onKeyDown={this.handleKeyDown}
-        onChange={this.handleInputChange}
-        value={inputValue}
-      />
+      <form className="new-todo-form" onSubmit={this.handleSubmitForm}>
+        <input
+          className="new-todo"
+          placeholder="What needs to be done?"
+          onChange={this.handleInputChange}
+          value={inputValue}
+          required
+        />
+        <input
+          className="new-todo-form__timer"
+          value={minutesValue}
+          onChange={this.handleInputMinutes}
+          required
+          placeholder="Min"
+        />
+        <input
+          className="new-todo-form__timer"
+          value={secondsValue}
+          onChange={this.handleInputSeconds}
+          required
+          placeholder="Sec"
+        />
+        <input className="new-todo-form__submit" type="submit" />
+      </form>
     );
   }
 }
